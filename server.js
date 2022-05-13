@@ -3,14 +3,18 @@ const app = express(); // used the library
 const bodyParser = require('body-parser');
 const port = 3000;
 const md5 = require('md5');
-const redis = require('redis')
+const redis = require('redis');
+
+const redisClient = redis.createClient();
 
 app.use(bodyParser.json()); // Use the middleware
 
 app.listen(port, ()=>{
     console.log("listening on Port: " +port)}); // listen
 
-app.post('/login', (request, response)=> {
+app.post('/login',async (request, response)=> {
+    const hashedPassword = md5(request.body.password)
+    const password = redisClient.hGet("passwords", request.body.username);
     const loginRequest = request.body;
     console.log("request Body", JSON.stringify(request.body));
     // search database for username and retrieve current password
