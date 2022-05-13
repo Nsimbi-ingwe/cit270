@@ -13,8 +13,8 @@ app.listen(port, ()=>{
     console.log("listening on Port: " +port)}); // listen
 
 app.post('/login',async (request, response)=> {
-    const hashedPassword = md5(request.body.password)
-    const password = redisClient.hGet("passwords", request.body.username);
+    const requestHashedPassword = md5(request.body.password)
+    const redisHashedPassword = await redisClient.hGet("passwords", request.body.username);
     const loginRequest = request.body;
     console.log("request Body", JSON.stringify(request.body));
     // search database for username and retrieve current password
