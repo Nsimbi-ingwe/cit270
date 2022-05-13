@@ -16,7 +16,7 @@ app.post('/login', (request, response)=> {
     // search database for username and retrieve current password
 
     // compare the hashed version of the password that was sent with the hashed version from the database
-    if (loginRequest.userName=="fake@fake.com" && loginRequest.password=="FakePassword1!"){
+    if (loginRequest.userName=="fake@fake.com" && loginRequest.password=="95ebfadfc077c727f1d28c949bd5fafd"){
         response.status(200); // 200 means ok
         response.send("Welcome");
     } else {
