@@ -1,39 +1,45 @@
-const express = require('express'); // imported the library
-const app = express(); // used the library
-const bodyParser = require('body-parser');
+const express = require('express');
 const port = 3000;
+const app = express();
 const md5 = require('md5');
-const {createClient} = require('redis');
-const redisClient = createClient();
+const bodyParser = require('body-parser');
+const {createClient} = require('redis')
 
+redisClient = createClient (
+{
+    socket:{
+        port:6379, 
+        host:"127.0.0.1"
+    }
+}
+); // This should creat the connection to the redis client
 
-app.use(bodyParser.json()); // Use the middleware
+redisClient.connect();
 
-app.listen(port, ()=>{
-    console.log("listening on Port: " +port)}); // listen
+app.use(bodyParser.json());
 
-const validatePassword = async(request, response) => {
-    await redisClient.connect();
-    const requestHashedPassword = md5(request.body.password)
-    const redisHashedPassword = await redisClient.hGet("passwords", request.body.userName);
+app.listen(port, ()=> {
+    console.log("listening on port: " + port)
+})
+
+const validatePassword = async (request, response) => {
+    const requestHashedPassword = md5(request.body.password);
+    const redisHashedPassword = await redisClient.hmGet('passwords', request.body.userName);
     const loginRequest = request.body;
-    console.log("request Body", JSON.stringify(request.body));
-    // search database for username and retrieve current password
+    console.log("Request Body", JSON.stringify(request.body));
 
-    // compare the hashed version of the password that was sent with the hashed version from the database
-    if (loginRequest.userName=="fake@fake.com" && requestHashedPassword == redisHashedPassword){
-        response.status(200); // 200 means ok
+    if (requestHashedPassword==redisHashedPassword) {
+        response.status(200);
         response.send("Welcome");
-    } else {
-        response.status(401); // 401 means unauthorized
+    } 
+    else{
+        response.status(401);
         response.send("Unauthorized");
     }
 }
 
-// app.post('/login',async (request, response)=> {
+app.get('/', (request, response) =>{
+    response.send("Hello");
+})
 
-//     }
-// );
-
-app.get('/', (request,response)=>{
-    response.send("Hello")}); // response
+app.post('/login', validatePassword);
