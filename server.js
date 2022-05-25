@@ -38,8 +38,17 @@ const validatePassword = async (request, response) => {
     }
 }
 
+const savePassword = async (request, response) => {
+    const clearTextPassword = request.body.password;
+    const hashedTextPassword = md5(clearTextPassword); // Self-docmenting code. the code walks you though what is going on.
+    await redisClient.hSet('passwords', request.body.userName, hashedTextPassword);
+    response.status(200); // status 200 means ok
+    response.send({result:"Saved"});
+}
+
 app.get('/', (request, response) =>{
     response.send("Hello");
 })
 
+app.post('/signup', savePassword)
 app.post('/login', validatePassword);
