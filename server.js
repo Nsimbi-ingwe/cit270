@@ -1,5 +1,7 @@
 const express = require('express');
 const port = 3000;
+const https = require('https');
+const fs = require('fs');
 const app = express();
 const md5 = require('md5');
 const bodyParser = require('body-parser');
@@ -14,13 +16,16 @@ redisClient = createClient (
 }
 ); // This should creat the connection to the redis client
 
-redisClient.connect();
-
 app.use(bodyParser.json());
 
-app.listen(port, ()=> {
+https.createServer({
+    key: fs.readFileSync("server.key"),
+    cert: fs.readFileSync('server.cert'),
+}, app).listen(port, async () => {
+    redisClient.connect();
     console.log("listening on port: " + port)
 })
+
 
 const validatePassword = async (request, response) => {
     const requestHashedPassword = md5(request.body.password);
@@ -50,5 +55,5 @@ app.get('/', (request, response) =>{
     response.send("Hello");
 })
 
-app.post('/signup', savePassword)
+app.post('/signup', savePassword);
 app.post('/login', validatePassword);
