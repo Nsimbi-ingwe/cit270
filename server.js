@@ -1,5 +1,5 @@
 const express = require('express');
-const port = 3000;
+const port = 443;
 const https = require('https');
 const fs = require('fs');
 const app = express();
@@ -21,6 +21,7 @@ app.use(bodyParser.json());
 https.createServer({
     key: fs.readFileSync("server.key"),
     cert: fs.readFileSync('server.cert'),
+    passphrase: 'P@ssw0rd'
 }, app).listen(port, async () => {
     redisClient.connect();
     console.log("listening on port: " + port)
