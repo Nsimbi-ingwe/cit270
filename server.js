@@ -8,13 +8,7 @@ const bodyParser = require('body-parser');
 const {createClient} = require('redis')
 
 redisClient = createClient (
-{
-    socket:{
-        port:6379, 
-        host:"127.0.0.1"
-    }
-}
-); // This should creat the connection to the redis client
+{url: 'redis://default:[PASSWORD]@10.128.0.5:6379', }); // This should creat the connection to the redis client
 
 app.use(bodyParser.json());
 
