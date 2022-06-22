@@ -1,1 +1,1 @@
-scp server.cert server.key owner@parker.nodejs.cit270.com:/tmp
+scp server.cert server.key owner@parker-nodejs.cit270.com:/tmp
