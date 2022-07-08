@@ -1,0 +1,37 @@
+appVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cit270
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: cit270
+    template: 
+      metadata: 
+        labels: 
+          app: cit270
+      spec:
+        containers:
+          - name: cit270
+            image: nsimbi/cit270
+            command: ["npm"]
+            args: ["run", "start"]
+            ports:
+              - containerPort: 443
+            resources:
+              limits:
+                cpu: "0.125"
+                memory: "500Mi"
+            livenessProbe:
+              httpGet:
+                path: /
+                port: 443
+              initialDelaySeconds: 3
+              periodSeconds: 3
+            readinessProbe:
+              httpGet:
+                path: /
+                port: 443
+              initialDelaySeconds: 3
+              periodSeconds: 3
