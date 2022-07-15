@@ -54,3 +54,37 @@ spec:
   ports:
   - port: 443
     targetPort: 443
+
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata: 
+  name: parker-ingress
+  namespace: default
+  annotations: 
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
+specs: 
+  tls: 
+  - hosts:
+    - parker-loadbalancer.cit270.com
+    secretName: parker-tls
+  rules: 
+  - host: parker-loadbalancer.cit270.com
+    http: 
+      paths: 
+      - backend: 
+        serviceName: cit270-loadbalancer
+        servicePort: 80
+
+
+# ---
+# apiVersion: networking.gke.io/v1
+# kind: ManagedCertificate
+# metadata:
+#   name: cit270-ManagedCertificate
+# spec: 
+#   domains:
+#     - parker-loadbalancer.cit270.com
