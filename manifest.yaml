@@ -78,13 +78,3 @@ specs:
       - backend: 
         serviceName: cit270-loadbalancer
         servicePort: 80
-
-
----
-apiVersion: networking.gke.io/v1
-kind: ManagedCertificate
-metadata:
-  name: cit270-ManagedCertificate
-spec: 
-  domains:
-    - parker-loadbalancer.cit270.com
