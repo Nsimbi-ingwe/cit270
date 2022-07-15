@@ -80,11 +80,11 @@ specs:
         servicePort: 80
 
 
-# ---
-# apiVersion: networking.gke.io/v1
-# kind: ManagedCertificate
-# metadata:
-#   name: cit270-ManagedCertificate
-# spec: 
-#   domains:
-#     - parker-loadbalancer.cit270.com
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: cit270-ManagedCertificate
+spec: 
+  domains:
+    - parker-loadbalancer.cit270.com
